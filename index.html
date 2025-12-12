@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEY-VISION | AI Cyber-Physical Security Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Styles for AI/Sci-Fi Aesthetic */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0; /* Slate 200 */
+        }
+        .dashboard-card { 
+            background-color: #1e293b; /* Slate 800 */
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), inset 0 0 8px rgba(6, 182, 212, 0.2); /* Cyan Glow */
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 0.75rem; 
+            border: 1px solid #083344; /* Darker Cyan Border */
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.5), inset 0 0 10px rgba(45, 212, 191, 0.3); /* Teal Glow on hover */
+        }
+        .btn-primary { 
+            background-image: linear-gradient(to right, #06b6d4 0%, #22d3ee 100%); /* Cyan Gradient */
+            color: #0f172a; /* Dark text on button */
+            font-weight: 700;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(34, 213, 238, 0.4);
+        }
+        .risk-low { color: #10b981; }    /* Emerald */
+        .risk-medium { color: #fbbf24; } /* Amber */
+        .risk-high { color: #f87171; }   /* Red */
+        .risk-unknown { color: #94a3b8; } /* Slate */
+        
+        /* Input/Text area styling for dark theme */
+        input[type="text"], input[type="password"] {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.5);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center py-6 bg-slate-800 rounded-xl shadow-2xl mb-8 border border-cyan-700">
+            <h1 class="text-4xl font-extrabold text-cyan-400 tracking-wider">
+                KEY-VISION: AI-Powered Cyber-Physical Security
+            </h1>
+            <p class="text-slate-400 mt-2 font-mono text-sm">Real-time Keystroke Dynamics Monitoring</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            
+            <div class="dashboard-card p-6 col-span-1 border-cyan-500">
+                <h2 class="text-xl font-semibold text-cyan-400 mb-4 border-b border-cyan-700 pb-2 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                    </svg>
+                    Access Gateway Simulation
+                </h2>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-slate-300">USER ID</label>
+                        <input type="text" id="username" name="username" required 
+                               class="mt-1 block w-full rounded-md shadow-sm p-3 border">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-300">PASSKEY (Try: password123)</label>
+                        <input type="password" id="password" name="password" required 
+                               class="mt-1 block w-full rounded-md shadow-sm p-3 border">
+                    </div>
+                    <button type="submit" id="loginButton"
+                            class="btn-primary w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-xl text-sm focus:outline-none focus:ring-4 focus:ring-cyan-500 focus:ring-opacity-50">
+                        ACCESS / LOG KEYSTROKES
+                    </button>
+                </form>
+
+                <div id="messageBox" class="mt-4 p-3 rounded-md hidden font-mono text-sm border-2"></div>
+            </div>
+
+            <div class="dashboard-card p-6 col-span-1 border-teal-500">
+                <h2 class="text-xl font-semibold text-teal-400 mb-4 border-b border-teal-700 pb-2 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1v-3m-6.447-2.834A23.111 23.111 0 0012 15c2.25 0 4.47-.633 6.38-1.834M21 12a9 9 0 00-18 0h4m8 0a9 9 0 0118 0v0"/>
+                    </svg>
+                    Real-time Threat Matrix
+                </h2>
+                <div class="space-y-4">
+                    <p class="text-slate-400 text-sm">AI's assessment of the last input dynamics:</p>
+                    <div id="latestPrediction" class="text-lg font-mono p-4 bg-slate-900 rounded-lg border border-teal-600">
+                        <p class="text-sm text-slate-500">Loading AI assessment...</p>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-teal-400 mt-4 border-t border-teal-700 pt-3">System Protocol</h3>
+                    <ul class="space-y-1 text-sm text-slate-400 font-mono list-disc list-inside ml-4">
+                        <li><span class="text-green-400">STATUS_OK:</span> Login success (200)</li>
+                        <li><span class="text-yellow-400">FAILURE_WARN:</span> Failed password (401)</li>
+                        <li><span class="text-red-400">FAILURE_LOCKED:</span> 5 failures, system locked (403)</li>
+                    </ul>
+                </div>
+            </div>
+
+             <div class="dashboard-card p-6 col-span-1 border-indigo-500">
+                <h2 class="text-xl font-semibold text-indigo-400 mb-4 border-b border-indigo-700 pb-2 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                    </svg>
+                    System Configuration
+                </h2>
+                <div class="space-y-3 text-sm text-slate-300">
+                    <p><strong>Security Model:</strong> RandomForestClassifier</p>
+                    <p><strong>Detection Metric:</strong> Keystroke Speed (ms)</p>
+                    <p class="font-bold border-t border-indigo-700 pt-3 mt-3">Lockout Policy:</p>
+                    <ul class="list-disc list-inside ml-4 text-indigo-300">
+                        <li>Max Failed Attempts: <span class="text-xl font-extrabold text-red-500">5</span></li>
+                        <li>Lockout Duration: <span class="text-xl font-extrabold text-yellow-500">60s</span></li> 
+                        <li>Keystroke Logging: <span class="risk-low">ACTIVE</span> (`key_logger.py`)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-card p-6 w-full border-gray-600">
+            <h2 class="text-xl font-semibold text-slate-300 mb-4 border-b border-gray-700 pb-2 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                </svg>
+                Keystroke Log Archive (Data Stream)
+            </h2>
+            <div id="logsTableContainer" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-slate-700 text-slate-300">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Key</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Speed (ms)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Risk Level</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody" class="bg-slate-800 divide-y divide-gray-700">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // FIX: SERVER_URL ko stable localhost IP se update kiya gaya hai.
+        const SERVER_URL = "http://127.0.0.1:5000"; 
+        const messageBox = document.getElementById('messageBox');
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
+        const logsTableBody = document.getElementById('logsTableBody');
+        const latestPredictionDiv = document.getElementById('latestPrediction');
+
+        let timerInterval = null;
+
+        // --- Utility Functions ---
+
+        function getRiskClass(risk) {
+            if (!risk) return 'risk-unknown';
+            const lowerRisk = risk.toLowerCase();
+            if (lowerRisk === 'low') return 'risk-low';
+            if (lowerRisk === 'medium') return 'risk-medium';
+            if (lowerRisk === 'high') return 'risk-high';
+            return 'risk-unknown';
+        }
+
+        function displayMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-900/50', 'bg-green-900/50', 'bg-yellow-900/50', 'bg-slate-700', 'text-red-300', 'text-green-300', 'text-yellow-300', 'text-slate-300', 'border-red-500', 'border-green-500', 'border-yellow-500', 'border-slate-500');
+            
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-900/50', 'text-green-300', 'border-green-500');
+            } else if (type === 'error' || type === 'locked') {
+                messageBox.classList.add('bg-red-900/50', 'text-red-300', 'border-red-500');
+            } else { // info
+                messageBox.classList.add('bg-slate-700', 'text-slate-300', 'border-slate-500');
+            }
+            messageBox.classList.remove('hidden');
+            messageBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- LOCKOUT TIMER FUNCTION ---
+        function startLockoutTimer(durationSeconds) {
+            // Agar pehle se koi timer chal raha hai to usse rok do
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            let timeRemaining = durationSeconds;
+            loginButton.disabled = true;
+
+            timerInterval = setInterval(() => {
+                timeRemaining -= 1;
+                
+                // Button aur Message dono ko update karo
+                if (timeRemaining > 0) {
+                    loginButton.textContent = `ACCESS DENIED | RETRY IN ${timeRemaining}s`;
+                    displayMessage(`⚠️ SYSTEM LOCKOUT: Account locked due to failed attempts. Try again in ${timeRemaining} seconds.`, 'locked');
+                } else {
+                    // Timer khatam
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'ACCESS / LOG KEYSTROKES';
+                    displayMessage("Lockout period terminated. Proceed with login attempt.", 'info');
+                }
+            }, 1000);
+        }
+        // ------------------------------
+
+        // 1. Fetch Latest Prediction
+        async function fetchLatestPrediction() {
+            try {
+                const response = await fetch(`${SERVER_URL}/predict_latest`);
+                const data = await response.json();
+
+                if (data.error || !response.ok) {
+                    latestPredictionDiv.innerHTML = `<p class="text-red-400 text-sm">Error: ${data.error || 'Server error'}</p>`;
+                    return;
+                }
+
+                if (!data.user_name) {
+                    latestPredictionDiv.innerHTML = `<p class="text-sm text-slate-500">No keystroke logs available. Log in to generate data.</p>`;
+                    return;
+                }
+
+                const riskClass = getRiskClass(data.risk_level);
+
+                latestPredictionDiv.innerHTML = `
+                    <p><span class="font-bold text-cyan-400">Target User:</span> ${data.user_name}</p>
+                    <p><span class="font-bold text-cyan-400">Timestamp:</span> ${data.timestamp}</p>
+                    <p><span class="font-bold text-cyan-400">Avg Speed:</span> ${data.typing_speed} ms</p>
+                    <p class="text-2xl mt-3 p-2 border-t border-slate-700">
+                        <span class="font-extrabold ${riskClass}">THREAT LEVEL: ${data.risk_level || 'UNKNOWN'}</span>
+                    </p>
+                `;
+
+            } catch (error) {
+                console.error("Error fetching latest prediction:", error);
+                latestPredictionDiv.innerHTML = `<p class="text-red-500 text-sm">CONNECTION OFFLINE: Could not connect to API.</p>`;
+            }
+        }
+
+        // 2. Fetch Logs
+        async function fetchLogs() {
+            try {
+                const response = await fetch(`${SERVER_URL}/logs`);
+                const logs = await response.json();
+
+                if (logs.error || !response.ok) {
+                    logsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-red-400">${logs.error || 'Server error'}</td></tr>`;
+                    return;
+                }
+
+                logsTableBody.innerHTML = ''; // Clear existing logs
+
+                if (logs.length === 0) {
+                     logsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">Log archive empty.</td></tr>`;
+                    return;
+                }
+
+                logs.forEach(log => {
+                    const riskClass = getRiskClass(log.risk_level);
+                    const row = document.createElement('tr');
+                    row.classList.add('hover:bg-slate-700/50', 'transition-colors');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400 font-mono">${log.timestamp.split(' ')[1]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-cyan-300">${log.user_name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">${log.key_pressed}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400 font-mono">${log.typing_speed}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold ${riskClass}">${log.risk_level}</td>
+                    `;
+                    logsTableBody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error("Error fetching logs:", error);
+                logsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-red-400">API connection failed.</td></tr>`;
+            }
+        }
+
+        // 3. Handle Login Form Submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Agar timer chal raha hai toh submit ko ignore karo
+            if (timerInterval) {
+                displayMessage("SYSTEM IS LOCKED. Wait for the countdown to finish.", 'locked');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            displayMessage("AUTHORIZING ACCESS: Processing keystroke dynamics...", 'info');
+            loginButton.disabled = true; // Temporary disable
+
+            try {
+                const response = await fetch(`${SERVER_URL}/login_attempt`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+                loginButton.disabled = false; // Enable again after receiving response
+
+                // Handle success, failure, and lockout based on HTTP Status Code
+                if (response.ok) {
+                    displayMessage(`[ACCESS GRANTED] Login successful. Threat Level: ${data.risk_level}`, 'success');
+                } else if (response.status === 401) {
+                    // FAILURE_WARN state (1st-4th failed attempts)
+                    displayMessage(`[WARNING] Access Key Invalid: ${data.message} | Threat Level: ${data.risk_level}`, 'error');
+                } else if (response.status === 403) {
+                    // FAILURE_LOCKED state (5th failed attempt)
+                        displayMessage(`[LOCKOUT INITIATED] ${data.message} | Threat Level: ${data.risk_level}`, 'locked');
+                        // Use server-provided lock duration when available (lock_duration or time_remaining), fallback to 60s.
+                        const lockSec = Number(data.lock_duration || data.time_remaining) || 60;
+                        startLockoutTimer(lockSec);
+                } else if (response.status === 429) {
+                     // Locked out, but time is remaining (initial check)
+                     displayMessage(`[LOCKED OUT] ${data.message} | Threat Level: ${data.risk_level}`, 'locked');
+                     startLockoutTimer(data.time_remaining);
+                } else {
+                    displayMessage(`[ERROR] (${response.status}): ${data.message || 'An unknown network error occurred.'}`, 'error');
+                }
+                
+                // Refresh the dashboard data
+                setTimeout(() => {
+                    fetchLatestPrediction();
+                    fetchLogs();
+                }, 500); 
+
+            } catch (error) {
+                console.error("Network Error:", error);
+                loginButton.disabled = false;
+                displayMessage(`[CONNECTION ERROR] Could not reach the Flask server at ${SERVER_URL}`, 'error');
+            }
+        });
+
+
+        // --- Initial Load ---
+
+        window.onload = function() {
+            fetchLatestPrediction();
+            fetchLogs();
+            
+            // Auto-refresh data streams
+            setInterval(fetchLogs, 10000); 
+            setInterval(fetchLatestPrediction, 5000); 
+        };
+
+    </script>
+</body>
+</html>
